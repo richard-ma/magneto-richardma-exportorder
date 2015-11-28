@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Richardma_Exportorder>
+            <version>1.0.0</version>
+        </Richardma_Exportorder>
+    </modules>
+        <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Richardma_Exportorder after="Mage_Adminhtml">Richardma_Exportorder</Richardma_Exportorder>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    
+    <global>
+        <helpers>
+            <richardma_exportorder>
+                <class>Richardma_Exportorder_Helper</class>
+            </richardma_exportorder>
+        </helpers>
+    </global>
+</config>

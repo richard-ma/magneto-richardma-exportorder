@@ -1,0 +1,34 @@
+<config>
+    <menu>
+        <richardma translate="title" module="richardma_exportorder">
+            <title>Richard Ma</title>
+            <sort_order>99</sort_order>
+            <children>
+                <example>
+                    <title>Export Order</title>
+                    <sort_order>1</sort_order>
+                    <action>adminhtml/exportorder/index</action>
+                </example>
+            </children>
+        </richardma>
+    </menu>
+    
+    <acl>
+        <resources>
+            <admin>
+                <children>                
+                    <richardma translate="title" module="richardma_exportorder">
+                        <title>Richard Ma</title>
+                        <sort_order>1</sort_order>
+                        <children>
+                            <example>
+                                <title>Export Order</title>
+                            </example>
+                        </children>
+                    </richardma>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    
+</config> 
