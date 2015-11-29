@@ -4,6 +4,11 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
     public function indexAction()
     {
         $this->loadLayout();
+
+        $block = $this->getLayout()->createBlock('richardma_exportorder/template')
+            ->setTemplate('form.phtml');
+        $this->_addContent($block);
+
         $this->renderLayout();
     }
 }

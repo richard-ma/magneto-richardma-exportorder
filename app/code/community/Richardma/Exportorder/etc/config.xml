@@ -5,19 +5,45 @@
             <version>1.0.0</version>
         </Richardma_Exportorder>
     </modules>
-        <admin>
+    <admin>
         <routers>
             <adminhtml>
                 <args>
                     <modules>
-                        <Richardma_Exportorder after="Mage_Adminhtml">Richardma_Exportorder</Richardma_Exportorder>
+                        <richardma_exportorder after="Mage_Adminhtml">Richardma_Exportorder</richardma_exportorder>
                     </modules>
                 </args>
             </adminhtml>
+            <richardma_exportorder>
+                <use>admin</use>
+                <args>
+                    <module>Richardma_Exportorder</module>
+                    <frontName>exportorder</frontName>
+                </args>
+            </richardma_exportorder>
         </routers>
     </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <richardma_exportorder>
+                    <file>exportreport.xml</file>
+                </richardma_exportorder>
+            </updates>
+        </layout>
+    </adminhtml>
     
     <global>
+        <blocks>
+            <richardma_exportorder>
+                <class>Richardma_Exportorder_Block</class>
+            </richardma_exportorder>
+        </blocks>
+        <models>
+            <richardma_exportorder>
+                <class>Richardma_Exportorder_Model</class>
+            </richardma_exportorder>
+        </models>
         <helpers>
             <richardma_exportorder>
                 <class>Richardma_Exportorder_Helper</class>

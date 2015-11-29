@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<layout version="1.0.0">
+    <default>
+    </default>
+    <exportorder>
+        <reference name="content">
+            <block type="exportorder/exportorder" name="exportorder" />
+        </reference>
+    </exportorder>
+</layout>
