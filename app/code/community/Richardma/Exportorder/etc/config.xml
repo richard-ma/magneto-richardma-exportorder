@@ -27,7 +27,7 @@
         <layout>
             <updates>
                 <richardma_exportorder>
-                    <file>exportreport.xml</file>
+                    <file>exportorder.xml</file>
                 </richardma_exportorder>
             </updates>
         </layout>
