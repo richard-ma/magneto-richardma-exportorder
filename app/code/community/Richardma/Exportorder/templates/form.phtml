@@ -1,1 +1,8 @@
-<h1>hello</h1>
+<h1>Richard Ma Export Order</h1>
+<form method="post" action="<?php echo Mage::getUrl('*/*/export'); ?>">
+    <div>
+      <label for="orderIds">order ID(s)</label>
+      <textarea name='orderIds' id='orderIds' rows='9' cols='60' wrap='virutal'></textarea>
+      <input type='submit' value='Export & Download Excel(csv) file' />
+    </div>
+</form>
