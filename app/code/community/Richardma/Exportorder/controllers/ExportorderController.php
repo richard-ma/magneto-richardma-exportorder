@@ -21,6 +21,5 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
         $this->_addContent($block);
 
         $this->renderLayout();
-        //Mage::logException("Export Action");
     }
 }

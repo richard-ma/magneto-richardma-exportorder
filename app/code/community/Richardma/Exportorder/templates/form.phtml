@@ -1,6 +1,7 @@
 <h1>Richard Ma Export Order</h1>
-<form method="post" action="<?php echo Mage::getUrl('*/*/export'); ?>">
+<form method="post" action="<?php echo $this->getUrl('*/*/export'); ?>" enctype="multipart/form-data">
     <div>
+      <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
       <label for="orderIds">order ID(s)</label>
       <textarea name='orderIds' id='orderIds' rows='9' cols='60' wrap='virutal'></textarea>
       <input type='submit' value='Export & Download Excel(csv) file' />
