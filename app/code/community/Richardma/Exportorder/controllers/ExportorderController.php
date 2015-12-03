@@ -73,7 +73,11 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
 
     public function exportOrderAction()
     {
-        return 0;
+    }
+
+    public function testAction()
+    {
+        var_dump(Mage::getBaseDir('lib'));
     }
 
     private function _genOrdersIdList($post_string) 
