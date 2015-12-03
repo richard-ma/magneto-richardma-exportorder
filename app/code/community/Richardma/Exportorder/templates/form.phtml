@@ -1,5 +1,5 @@
 <h1>Richard Ma Export Order</h1>
-<form method="post" action="<?php echo $this->getUrl('*/*/export'); ?>" enctype="multipart/form-data">
+<form method="post" action="<?php echo $this->getUrl('*/*/exportAddressList'); ?>" enctype="multipart/form-data">
     <div>
       <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
       <label for="orderIds">order ID(s)</label>
