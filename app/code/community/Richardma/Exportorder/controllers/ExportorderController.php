@@ -15,7 +15,7 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
     public function exportAddressListAction() 
     {
         $orderIds = $this->getRequest()->getPost('orderIds');
-        $this->_genOrdersIdList($orderIds);
+        $orderIds = $this->_genOrdersIdList($orderIds);
 
         $orders = Mage::getModel('sales/order')
             ->getCollection()
@@ -55,7 +55,7 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
 
             //$line = str_replace(PHP_EOL, '', $line);
     
-	    	$data .= $line;
+	    	$data .= $line.PHP_EOL;
         }
         //echo $data;
         
