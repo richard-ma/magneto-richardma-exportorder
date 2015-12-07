@@ -59,7 +59,7 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
         }
         //echo $data;
         
-        // Redirect output to a client’s web browser (csv)
+        //Redirect output to a client’s web browser (csv)
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment;filename="address-list-'.date('Y_m_d_H_i_s').'.csv"');
         header('Cache-Control: max-age=0');
@@ -67,7 +67,7 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
         header ('Pragma: public'); // HTTP/1.0
         
-    	echo $data;
+        echo $data;
     }
 
     public function exportOrderAction()
@@ -108,6 +108,9 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
         foreach ($orders as $_order) {
           $address = $_order->getShippingAddress();
           $items = $_order->getAllItems();
+//var_dump($items[0]->getName());
+//var_dump($items[0]->getSku());
+//var_dump($items[0]->getQtyOrdered());
           $end = $start + $delta - 1;
           $objPHPExcel->getActiveSheet()
                       ->mergeCells('A'.$start.':A'.$end.'')
@@ -122,6 +125,11 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
                       ->setCellValue('C'.(string)($start + 3).'', $address->getData('city'). ', ' .$address->getData('region'). ' ' .$address->getData('postcode'))
                       ->setCellValue('C'.(string)($start + 4).'', Mage::app()->getLocale()->getCountryTranslation($address->getData('country_id')))
                       ->setCellValue('C'.(string)($start + 5).'', $address->getData('telephone'))
+
+                      ->setCellValue('D'.$start.'', $items[0]->getName())
+                      ->setCellValue('D'.(string)($start + 1).'', 'Qty: '.$items[0]->getQtyOrdered())
+                      ->setCellValue('D'.(string)($start + 2).'', 'SKU: '.$items[0]->getSku())
+
                       ->getStyle('C'.(string)($start + 5))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
           // add picture
           $objDrawing = new PHPExcel_Worksheet_Drawing();
