@@ -73,7 +73,7 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
     public function exportOrderAction()
     {
         $orderIds = $this->getRequest()->getPost('orderIds');
-        $this->_genOrdersIdList($orderIds);
+        $orderIds = $this->_genOrdersIdList($orderIds);
 
         $orders = Mage::getModel('sales/order')
             ->getCollection()
@@ -107,12 +107,13 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
         $start = 1;
         foreach ($orders as $_order) {
           $address = $_order->getShippingAddress();
+          $items = $_order->getAllItems();
           $end = $start + $delta - 1;
           $objPHPExcel->getActiveSheet()
                       ->mergeCells('A'.$start.':A'.$end.'')
                       ->setCellValue('A'.$start.'', $_order->getIncrementId())
 
-                      ->setCellValue('B'.$start.'', 'size: ' . 'size alter')
+                      ->setCellValue('B'.$start.'', 'size: ' . $items[0]->getProductOptions()['options'][0]['value'])
                       ->mergeCells('B'.(string)($start+1).':B'.$end.'')
 
                       ->setCellValue('C'.$start.'', $address->getData('firstname'). ' ' .$address->getData('lastname'))
@@ -124,7 +125,6 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
                       ->getStyle('C'.(string)($start + 5))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
           // add picture
           $objDrawing = new PHPExcel_Worksheet_Drawing();
-          $items = $_order->getAllItems();
           $imageUrl = $items[0]->getProduct()->getImageUrl();
           $imageUrl = str_replace(Mage::getBaseUrl('media'), Mage::getBaseDir('media').'/', $imageUrl);
           $objDrawing->setPath($imageUrl);
