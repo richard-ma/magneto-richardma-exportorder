@@ -35,7 +35,7 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
             $line .= $address->getData('firstname'). ' ' .$address->getData('lastname');
             $line .= ',';
             // Address
-            $line .= $address->getData('street');
+            $line .= str_replace(PHP_EOL, ' ', $address->getData('street'));
             $line .= ',';
             // City
             $line .= $address->getData('city');
@@ -117,9 +117,9 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
                       ->mergeCells('B'.(string)($start+1).':B'.$end.'')
 
                       ->setCellValue('C'.$start.'', $address->getData('firstname'). ' ' .$address->getData('lastname'))
-                      ->setCellValue('C'.(string)($start + 1).'', $address->getData('street'))
-                      ->setCellValue('C'.(string)($start + 2).'', $address->getData('region'))
-                      ->setCellValue('C'.(string)($start + 3).'', $address->getData('city'). ',' .$address->getData('region'). ' ' .$address->getData('postcode'))
+                      ->setCellValue('C'.(string)($start + 1).'', split(PHP_EOL, $address->getData('street'))[0])
+                      ->setCellValue('C'.(string)($start + 2).'', split(PHP_EOL, $address->getData('street'))[1])
+                      ->setCellValue('C'.(string)($start + 3).'', $address->getData('city'). ', ' .$address->getData('region'). ' ' .$address->getData('postcode'))
                       ->setCellValue('C'.(string)($start + 4).'', Mage::app()->getLocale()->getCountryTranslation($address->getData('country_id')))
                       ->setCellValue('C'.(string)($start + 5).'', $address->getData('telephone'))
                       ->getStyle('C'.(string)($start + 5))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
