@@ -15,7 +15,7 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
     public function exportAddressListAction() 
     {
         $orderIds = $this->getRequest()->getPost('orderIds');
-        $this->_genOrdersIdList($orderIds);
+        $orderIds = $this->_genOrdersIdList($orderIds);
 
         $orders = Mage::getModel('sales/order')
             ->getCollection()
@@ -35,7 +35,7 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
             $line .= $address->getData('firstname'). ' ' .$address->getData('lastname');
             $line .= ',';
             // Address
-            $line .= $address->getData('street');
+            $line .= str_replace(PHP_EOL, ' ', $address->getData('street'));
             $line .= ',';
             // City
             $line .= $address->getData('city');
@@ -55,11 +55,11 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
 
             //$line = str_replace(PHP_EOL, '', $line);
     
-	    	$data .= $line;
+	    	$data .= $line.PHP_EOL;
         }
         //echo $data;
         
-        // Redirect output to a client’s web browser (csv)
+        //Redirect output to a client’s web browser (csv)
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment;filename="address-list-'.date('Y_m_d_H_i_s').'.csv"');
         header('Cache-Control: max-age=0');
@@ -67,7 +67,7 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
         header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
         header ('Pragma: public'); // HTTP/1.0
         
-    	echo $data;
+        echo $data;
     }
 
     public function exportOrderAction()
@@ -106,33 +106,43 @@ class Richardma_Exportorder_ExportorderController extends Mage_Adminhtml_Control
         $delta = 6;
         $start = 1;
         foreach ($orders as $_order) {
-          $address = $_order->getShippingAddress();
-          $items = $_order->getAllItems();
-          $end = $start + $delta - 1;
-          $objPHPExcel->getActiveSheet()
-                      ->mergeCells('A'.$start.':A'.$end.'')
-                      ->setCellValue('A'.$start.'', $_order->getIncrementId())
+            $address = $_order->getShippingAddress();
+            $items = $_order->getAllItems();
+//var_dump($items[0]->getName());
+//var_dump($items[0]->getSku());
+//var_dump($items[0]->getQtyOrdered());
+            foreach ($items as $_item) {
+                $end = $start + $delta - 1;
+                $objPHPExcel->getActiveSheet()
+                        ->mergeCells('A'.$start.':A'.$end.'')
+                        ->setCellValue('A'.$start.'', $_order->getIncrementId())
+    
+                        ->setCellValue('B'.$start.'', 'size: ' . $_item->getProductOptions()['options'][0]['value'])
+                        ->mergeCells('B'.(string)($start+1).':B'.$end.'')
 
-                      ->setCellValue('B'.$start.'', 'size: ' . $items[0]->getProductOptions()['options'][0]['value'])
-                      ->mergeCells('B'.(string)($start+1).':B'.$end.'')
+                        ->setCellValue('C'.$start.'', $address->getData('firstname'). ' ' .$address->getData('lastname'))
+                        ->setCellValue('C'.(string)($start + 1).'', split(PHP_EOL, $address->getData('street'))[0])
+                        ->setCellValue('C'.(string)($start + 2).'', split(PHP_EOL, $address->getData('street'))[1])
+                        ->setCellValue('C'.(string)($start + 3).'', $address->getData('city'). ', ' .$address->getData('region'). ' ' .$address->getData('postcode'))
+                        ->setCellValue('C'.(string)($start + 4).'', Mage::app()->getLocale()->getCountryTranslation($address->getData('country_id')))
+                        ->setCellValue('C'.(string)($start + 5).'', $address->getData('telephone'))
 
-                      ->setCellValue('C'.$start.'', $address->getData('firstname'). ' ' .$address->getData('lastname'))
-                      ->setCellValue('C'.(string)($start + 1).'', $address->getData('street'))
-                      ->setCellValue('C'.(string)($start + 2).'', $address->getData('region'))
-                      ->setCellValue('C'.(string)($start + 3).'', $address->getData('city'). ',' .$address->getData('region'). ' ' .$address->getData('postcode'))
-                      ->setCellValue('C'.(string)($start + 4).'', Mage::app()->getLocale()->getCountryTranslation($address->getData('country_id')))
-                      ->setCellValue('C'.(string)($start + 5).'', $address->getData('telephone'))
-                      ->getStyle('C'.(string)($start + 5))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-          // add picture
-          $objDrawing = new PHPExcel_Worksheet_Drawing();
-          $imageUrl = $items[0]->getProduct()->getImageUrl();
-          $imageUrl = str_replace(Mage::getBaseUrl('media'), Mage::getBaseDir('media').'/', $imageUrl);
-          $objDrawing->setPath($imageUrl);
-          $objDrawing->setCoordinates('B'.(string)($start+1));
-          $objDrawing->setHeight(80);
-          $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+                        ->setCellValue('D'.$start.'', $_item->getName())
+                        ->setCellValue('D'.(string)($start + 1).'', 'Qty: '.$_item->getQtyOrdered())
+                        ->setCellValue('D'.(string)($start + 2).'', 'SKU: '.$_item->getSku())
 
-          $start = $start + $delta;
+                        ->getStyle('C'.(string)($start + 5))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+                // add picture
+                $objDrawing = new PHPExcel_Worksheet_Drawing();
+                $imageUrl = $_item->getProduct()->getImageUrl();
+                $imageUrl = str_replace(Mage::getBaseUrl('media'), Mage::getBaseDir('media').'/', $imageUrl);
+                $objDrawing->setPath($imageUrl);
+                $objDrawing->setCoordinates('B'.(string)($start+1));
+                $objDrawing->setHeight(80);
+                $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
+
+                $start = $start + $delta;
+            }
         }
         
         // Rename worksheet

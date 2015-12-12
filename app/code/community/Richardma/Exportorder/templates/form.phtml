@@ -1,9 +1,18 @@
 <h1>Richard Ma Export Order</h1>
-<form method="post" action="<?php echo $this->getUrl('*/*/exportOrder'); ?>" enctype="multipart/form-data">
+<script type="text/javascript">
+var setActionAndSubmitForm = function (actionUrl) {
+    form = document.getElementById('order_id_form');
+    form.action = actionUrl;
+    form.submit();
+};
+</script>
+<form id="order_id_form" method="post" enctype="multipart/form-data">
     <div>
       <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>" />
       <label for="orderIds">order ID(s)</label>
       <textarea name='orderIds' id='orderIds' rows='9' cols='60' wrap='virutal'></textarea>
-      <input type='submit' value='Export & Download Excel(csv) file' />
+      <input type='button' value='Export & Download Excel(xslx) file' onclick='setActionAndSubmitForm("<?php echo $this->getUrl('*/*/exportOrder'); ?>");' />
+      <input type='button' value='Export & Download Address List(csv) file' onclick='setActionAndSubmitForm("<?php echo $this->getUrl('*/*/exportAddressList'); ?>");' />
     </div>
 </form>
+
